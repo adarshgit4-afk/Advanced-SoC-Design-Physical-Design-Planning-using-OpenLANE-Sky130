@@ -197,6 +197,102 @@ Screenshot of legally placed Standard cells
 
 ## Theory
 
+### Core Logic Cells: The CMOS Inverter
+
+The Complementary Metal-Oxide-Semiconductor (CMOS) inverter serves as the foundational element for all digital integrated circuit design. Analyzing this basic cell allows engineers to evaluate fundamental hardware parameters before scaling to larger systems.
+
+### Layout Synthesis & Verification
+
+**Design Metric Foundations:** Inverter analysis provides critical insights into optimal transistor sizing (adjusting the channel width-to-length ratio $W/L$), physical layout optimization techniques, and core electrical performance benchmarks.
+
+**Geometrical Layout Production:** Engineers utilize the open-source tool Magic to draw exact physical mask layers, cross-reference geometry boundaries, and generate structural hardware representations by extracting SPICE netlists.
+
+**Manufacturing Constraint Safeguards:** Fabrication success relies on strict adherence to foundry design rules. These mandate minimum feature widths to prevent open circuits, minimum spacing intervals between separate masks to prevent short circuits, and specific layer enclosure requirements for contact integrity.
+
+### Performance Characterization with SPICE
+
+Once the layout netlist is extracted, circuit simulators like ngspice execute transient and power analyses to determine the cell's real-world efficiency and operational speed.
+
+| Performance Metric | Physical Definition |
+| :--- | :--- |
+| Propagation Delay | The time required for an input signal transition to cause a 50% response change at the output terminal. |
+| Rise Time | The duration it takes for the output voltage to transition from 20% up to 80% of the maximum $V_{DD}$ supply. |
+| Fall Time | The duration it takes for the output voltage to drop from 80% down to 20% of the maximum $V_{DD}$ supply. |
+
+### Implementation
+
+Section 3 tasks:-
+
+1. Clone custom inverter standard cell design from github repository: [Standard cell design and characterization using OpenLANE flow](https://github.com/nickson-jose/vsdstdcelldesign)
+2. Loading the custom inverter layout in magic.
+3. Spice extraction of inverter in magic.
+4. Editing the spice model file for analysis through simulation.
+5. Post-layout ngspice simulations.
+6. Find problem in the DRC section of the old magic tech file for the skywater process and fix them.
+
+**1. Clone custom inverter standard cell design from github repository**
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 02-37-04" src="https://github.com/user-attachments/assets/2df603b1-cc51-4e55-b124-454dc9b0fcbe" />
+
+**2. Loading the custom inverter layout in magic.**
+
+Attached below is the screenshot of custom inverter layout in magic.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 03-35-09" src="https://github.com/user-attachments/assets/cc9077f5-a3d8-4b24-b514-19a1f41ec2b8" />
+
+NMOS and PMOS are identified from the inverter layout.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-25-44" src="https://github.com/user-attachments/assets/386cc6ac-019f-4467-9db3-6224ce03fe72" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-27-19" src="https://github.com/user-attachments/assets/88d6280d-7412-4cfd-9bce-6e9f620b50e0" />
+
+Output Y connectivity to PMOS and NMOS drain is verified.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-27-35" src="https://github.com/user-attachments/assets/37f68583-3f11-44ff-8127-db1395716291" />
+
+PMOS source connectivity to VDD (here VPWR) is verified.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-27-42" src="https://github.com/user-attachments/assets/5a9756a2-ffe2-4718-ac05-a00ea0f84348" />
+
+NMOS source connectivity to VSS (here VGND) is verified.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-27-49" src="https://github.com/user-attachments/assets/c986d1b3-0caa-494d-81a3-75a2fc8d0d41" />
+
+Deleting necessary layout part to see DRC error.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 19-56-46" src="https://github.com/user-attachments/assets/67b14b7f-8c58-4331-9f69-ffa601547b22" />
+
+**3. Spice extraction of inverter in magic.**
+
+Attached below is the screenshot of tkcon window after running the spice extraction commands.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 21-17-19" src="https://github.com/user-attachments/assets/0b4a0594-cea6-4b98-b925-6408709cf21b" />
+
+Attached below is the screenshot of created spice file.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-14 21-20-43" src="https://github.com/user-attachments/assets/bec10d81-eee5-4636-b6a5-43ab2f036162" />
+
+**4. Editing the spice model file for analysis through simulation.**
+
+Measuring unit distance in layout grid.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 00-51-25" src="https://github.com/user-attachments/assets/8dc2ea14-6767-4f82-9eb5-f4a158e3ef00" />
+
+Attached below is the final edited spice file ready for ngspice simulation.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-15-52" src="https://github.com/user-attachments/assets/fc9892a3-82f8-483d-9529-ab478ad798a8" />
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
