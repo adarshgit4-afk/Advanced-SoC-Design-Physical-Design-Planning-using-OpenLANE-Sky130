@@ -753,7 +753,7 @@ run_synthesis
 
 Newly created pre_sta.conf for STA analysis in openlane directory
 
-<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-04-41" src="https://github.com/user-attachments/assets/fa90cf56-a895-4900-8ca7-23e55637f620" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-18 02-11-21" src="https://github.com/user-attachments/assets/148ccc04-64cc-46df-91d0-7d02f08d9895" />
 
 Newly created my_base.sdc for STA analysis in openlane/designs/picorv32a/src directory based on the file openlane/scripts/base.sdc
 
