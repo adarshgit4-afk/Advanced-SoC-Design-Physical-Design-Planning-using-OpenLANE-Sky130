@@ -897,7 +897,7 @@ Commands to write verilog:
 **Overwriting current synthesis netlist:**
 write_verilog /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/synthesis/picorv32a.synthesis.v
 
-# Exit from OpenSTA since timing analysis is done
+**Exit from OpenSTA since timing analysis is done:**
 exit
 
 <img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-19-53" src="https://github.com/user-attachments/assets/177bb8a3-6e9f-4608-92d2-0ac20b465a8a" />
