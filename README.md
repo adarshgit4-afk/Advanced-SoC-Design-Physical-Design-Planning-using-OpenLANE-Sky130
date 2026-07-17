@@ -759,33 +759,189 @@ Newly created my_base.sdc for STA analysis in openlane/designs/picorv32a/src dir
 
 <img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-05-22" src="https://github.com/user-attachments/assets/813dad0d-092b-4355-a7f6-89bf95ef0a24" />
 
+Below are the commands to run STA in another terminal:
 
+**Change directory to openlane:**
+cd Desktop/work/tools/openlane_working_dir/openlane
 
+**Command to invoke OpenSTA tool with script:**
+sta pre_sta.conf
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-08-15" src="https://github.com/user-attachments/assets/5092762f-a902-49e9-bd53-a22d5883f0b5" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-08-24" src="https://github.com/user-attachments/assets/12d2ef93-7bcd-428e-9af1-2f1d351d68ef" />
 
+Since more fanout is causing more delay we can add parameter to reduce fanout and do synthesis again
 
+Commands to include new lef and perform synthesis:
 
+**Now the OpenLANE flow is ready to run any design and initially we have to prep the design creating some necessary files and directories for running a specific design which in our case is 'picorv32a':**
+prep -design picorv32a -tag 15-07_18-19 -overwrite
 
+**Adiitional commands to include newly added lef to openlane flow:**
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
 
+**Command to set new value for SYNTH_SIZING:**
+set ::env(SYNTH_SIZING) 1
 
+**Command to set new value for SYNTH_MAX_FANOUT:**
+set ::env(SYNTH_MAX_FANOUT) 4
 
+**Command to display current value of variable SYNTH_DRIVING_CELL to check whether it's the proper cell or not:**
+echo $::env(SYNTH_DRIVING_CELL)
 
+**Now that the design is prepped and ready, we can run synthesis using following command:**
+run_synthesis
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-17-46" src="https://github.com/user-attachments/assets/cb5b2803-9390-4da7-9f37-3cd29291c16a" />
 
+Command to run STA in another terminal: sta pre_sta.conf
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-20-38" src="https://github.com/user-attachments/assets/6cd53b45-a14a-4f7e-b570-073e17e839c9" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-20-43" src="https://github.com/user-attachments/assets/724b9880-306e-4f27-a3e6-2f0d39532ced" />
 
+**10. Make timing ECO fixes to remove all violations.**
 
+OR gate of drive strength 2 is driving 4 fanouts
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-22-28" src="https://github.com/user-attachments/assets/e45c8b11-b22d-4920-a4b6-15f9d93365b7" />
 
+Commands to perform analysis and optimize timing by replacing with OR gate of drive strength 4:
 
+**Reports all the connections to a net:**
+report_net -connections _11672_
 
+**Checking command syntax:**
+help replace_cell
 
+**Replacing cell:**
+replace_cell _14510_ sky130_fd_sc_hd__or3_4
 
+**Generating custom timing report:**
+report_checks -fields {net cap slew input_pins} -digits 4
 
+Result - Slack reduced
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-26-31" src="https://github.com/user-attachments/assets/cb13fa41-509e-4fce-8ccf-564b89a3f9c4" />
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-29-38" src="https://github.com/user-attachments/assets/bd1d34c8-3547-4ea6-838a-41ded1114170" />
 
+OR gate of drive strength 2 is driving 4 fanouts
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-33-34" src="https://github.com/user-attachments/assets/74172ab5-3956-41aa-810d-03ea76ac39da" />
+
+Result - Slack reduced
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-36-14" src="https://github.com/user-attachments/assets/13870520-a1d8-491c-b2d1-767bcc136918" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-36-36" src="https://github.com/user-attachments/assets/4cb77609-97e4-4fd5-bbe0-92603a9dc86e" />
+
+OR gate of drive strength 2 driving OA gate has more delay
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-39-16" src="https://github.com/user-attachments/assets/9c5d9506-bace-44b8-9b9a-cc04a8cf3b8b" />
+
+Commands to perform analysis and optimize timing by replacing with OR gate of drive strength 4:
+
+**Reports all the connections to a net:**
+report_net -connections _11643_
+
+**Replacing cell:**
+replace_cell _14481_ sky130_fd_sc_hd__or4_4
+
+**Generating custom timing report:**
+report_checks -fields {net cap slew input_pins} -digits 4
+
+Result - Slack reduced
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-41-40" src="https://github.com/user-attachments/assets/78de701b-7e94-48d0-bdbf-17f655b091e8" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-41-52" src="https://github.com/user-attachments/assets/36af4dba-41ae-4476-b5d5-58e363d632a3" />
+
+OR gate of drive strength 2 driving OA gate has more delay
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-45-25" src="https://github.com/user-attachments/assets/de14c56d-4272-4ca0-836f-3b6306f57bfe" />
+
+Result - Slack reduced
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-47-05" src="https://github.com/user-attachments/assets/51569a63-690c-4a86-8efc-6bbb32369f55" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-47-31" src="https://github.com/user-attachments/assets/4effee62-39ed-457b-b76b-ea2c7a7706c8" />
+
+Command to verify instance _14506_ is replaced with sky130_fd_sc_hd__or4_4: report_checks -from _29043_ -to _30440_ -through _14506_
+
+Attached below is the screenshot of replaced instance
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-51-08" src="https://github.com/user-attachments/assets/5194a4a4-4bbe-4a26-875c-5679710dc98b" />
+
+We started ECO fixes at wns -23.9000 and now we stand at wns -22.6173 we reduced around 1.2827 ns of violation.
+
+**11. Replace the old netlist with the new netlist generated after timing ECO fix and implement the floorplan, placement and cts.**
+
+Now to insert this updated netlist to PnR flow and we can use write_verilog and overwrite the synthesis netlist but before that we are going to make a copy of the old old netlist
+
+Commands to make copy of netlist:
+
+**Change from home directory to synthesis results directory:**
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/synthesis/
+
+**List contents of the directory:**
+ls -ltr
+
+**Copy and rename the netlist:**
+cp picorv32a.synthesis.v picorv32a.synthesis_old.v
+
+**List contents of the directory:**
+ls -ltr
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-06-50" src="https://github.com/user-attachments/assets/62f6cc00-57d3-4b87-897c-4a69ce58973f" />
+
+Commands to write verilog:
+
+**Overwriting current synthesis netlist:**
+write_verilog /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/synthesis/picorv32a.synthesis.v
+
+# Exit from OpenSTA since timing analysis is done
+exit
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-19-53" src="https://github.com/user-attachments/assets/177bb8a3-6e9f-4608-92d2-0ac20b465a8a" />
+
+Verified that the netlist is overwritten by checking that instance _14506_ is replaced with sky130_fd_sc_hd__or4_4
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-23-42" src="https://github.com/user-attachments/assets/c92624b6-e770-4336-8b7b-bb86a5fc8035" />
+
+Since we confirmed that netlist is replaced and will be loaded in PnR but since we want to follow up on the earlier 0 violation design we are continuing with the clean design to further stages
+
+Commands load the design and run necessary stages:
+
+**Now once again we have to prep design so as to update variables:**
+prep -design picorv32a -tag 15-07_18-19 -overwrite
+
+**Addiitional commands to include newly added lef to openlane flow merged.lef:**
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+
+**Command to set new value for SYNTH_STRATEGY:**
+set ::env(SYNTH_STRATEGY) "DELAY 3"
+
+**Command to set new value for SYNTH_SIZING:**
+set ::env(SYNTH_SIZING) 1
+
+**Now that the design is prepped and ready, we can run synthesis using following command:**
+run_synthesis
+
+**Follwing commands are alltogather sourced in "run_floorplan" command:**
+init_floorplan
+place_io
+tap_decap_or
+
+**Now we are ready to run placement:**
+run_placement
+
+**With placement done we are now ready to run CTS:**
+run_cts
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-30-02" src="https://github.com/user-attachments/assets/917acec2-3027-4230-92bf-35528ecca39b" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-31-44" src="https://github.com/user-attachments/assets/7e6a9b40-7bcd-4ebc-83e9-1023cee9a3d6" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-34-07" src="https://github.com/user-attachments/assets/6f7cee3f-2fea-4bdd-8833-4c5b1ad3d530" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 03-34-23" src="https://github.com/user-attachments/assets/bfc1c43b-db07-4b63-a696-d2663cba2874" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 13-21-39" src="https://github.com/user-attachments/assets/393f39ec-aa7b-4305-b395-4ca5587c0ee5" />
 
 
 
