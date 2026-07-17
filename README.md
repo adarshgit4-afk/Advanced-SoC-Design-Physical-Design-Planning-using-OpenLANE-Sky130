@@ -1140,7 +1140,7 @@ Attached below is the screenshots of PDN def
 
 <img width="1920" height="1080" alt="Screenshot from 2026-07-17 03-52-09" src="https://github.com/user-attachments/assets/59635da5-645c-42bf-9440-8673689d38ba" />
 
-**2. Perfrom detailed routing using TritonRoute and explore the routed layout.**
+**2. Perform detailed routing using TritonRoute and explore the routed layout.**
 
 Command to perform routing: **run_routing**
 
