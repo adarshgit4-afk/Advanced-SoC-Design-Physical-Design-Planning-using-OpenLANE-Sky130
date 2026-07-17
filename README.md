@@ -515,6 +515,164 @@ Successful Clock Tree Synthesis directly improves timing closure. By minimizing 
 
 ## Implementation
 
+**1. Fix up small DRC errors and verify the design is ready to be inserted into our flow.**
+
+Conditions to be verified before moving forward with custom designed cell layout:
+
+**Condition 1:** The input and output ports of the standard cell should lie on the intersection of the vertical and horizontal tracks.
+
+**Condition 2:** Width of the standard cell should be odd multiples of the horizontal track pitch.
+
+**Condition 3:** Height of the standard cell should be even multiples of the vertical track pitch.
+
+Below are the commands to open the custom inverter layout
+
+**Change directory to vsdstdcelldesign:**
+cd Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
+
+**Command to open custom inverter layout in magic:**
+magic -T sky130A.tech sky130_inv.mag &
+
+Attached below is the screenshot of tracks.info of sky130_fd_sc_hd
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-11-43" src="https://github.com/user-attachments/assets/076c85fc-e629-4539-8c04-20ea42df6130" />
+
+Commands for tkcon window to set grid as tracks of locali layer
+
+**Get syntax for grid command:**
+help grid
+
+**Set grid values accordingly:**
+grid 0.46um 0.34um 0.23um 0.17um
+
+Screenshot of commands been run
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-14-38" src="https://github.com/user-attachments/assets/dba4617a-8d32-42dc-93b9-d83b952ce407" />
+
+Condition 1 is verified
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-14-46" src="https://github.com/user-attachments/assets/05c03b87-be43-4bfd-b89e-ba6c883afb31" />
+
+Condition 2 is verified
+
+Horizontal Track Pitch = 0.46 um
+
+Width of Standard cell = 1.38 um = 0.46 ∗ 3
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-24-19" src="https://github.com/user-attachments/assets/b74dcf88-5a53-4932-ac13-5ba14e85fa53" />
+
+Condition 3 is verified
+
+Vertical Track Pitch = 0.46 um
+
+Height of Standard cell = 2.72 um = 0.34 ∗ 8
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-25-55" src="https://github.com/user-attachments/assets/7044f208-9a8c-4a4c-9f1f-d6b55445cd58" />
+
+**2. Save the finalized layout with custom name and open it.**
+
+Command for tkcon window to save the layout with custom name:
+save sky130_vsdinv.mag
+
+Command to open the newly saved layout in magic:
+magic -T sky130A.tech sky130_vsdinv.mag &
+
+Attached below is the screenshot of newly saved layout
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-28-50" src="https://github.com/user-attachments/assets/4c934df3-ad35-4995-bc2d-6d4b47d1709e" />
+
+**3. Generate lef from the layout.**
+
+Command for tkcon window to write lef: lef write
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-29-55" src="https://github.com/user-attachments/assets/ac13df98-ea03-4c0b-9c33-ef9c3a8b1966" />
+
+Attached below is the screenshot of newly created lef file
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-30-55" src="https://github.com/user-attachments/assets/dfe80180-3923-4b2c-91cb-fbd1864990b0" />
+
+**4. Copy the newly generated lef and associated required lib files to 'picorv32a' design 'src' directory.**
+
+Commands to copy necessary files to 'picorv32a' design 'src' directory:
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-41-39" src="https://github.com/user-attachments/assets/bd193cc7-60a9-4c54-9a08-981efc4ef7db" />
+
+**5. Edit 'config.tcl' to change lib file and add the new extra lef into the openlane flow.**
+
+Below are the commands to be added to config.tcl to include our custom cell in the openlane flow:
+
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib"
+
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+
+Attached below is the screenshot of config.tcl after adding above commands
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-47-14" src="https://github.com/user-attachments/assets/f937278a-5918-42ed-b326-1906504c9684" />
+
+**6. Run openlane flow synthesis with newly inserted custom inverter cell.**
+
+Commands to invoke the OpenLANE flow include new lef and perform synthesis:
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-51-19" src="https://github.com/user-attachments/assets/774a064a-b4f4-46a2-8c73-5fa8b507736f" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 23-52-45" src="https://github.com/user-attachments/assets/d103a94a-cb3f-4797-b022-3c0bb4767f38" />
+
+**7. Remove/reduce the newly introduced violations with the introduction of custom inverter cell by modifying design parameters.**
+
+Noting down current design values generated before modifying parameters to improve timing
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-09-37" src="https://github.com/user-attachments/assets/930263e7-57b9-4835-bcfb-84d4bafe7d71" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-09-46" src="https://github.com/user-attachments/assets/e5704cbc-0a46-411d-b578-3a7785733ec5" />
+
+Screenshot of merged.lef in tmp directory with our custom inverter as macro
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-39-30" src="https://github.com/user-attachments/assets/8ef37d08-6c14-4f60-a192-cf1bca084659" />
+
+Commands to view and change parameters to improve timing and run synthesis:
+
+**Now once again we have to prep design so as to update variables:**
+prep -design picorv32a -tag 15-07_18-19 -overwrite
+
+**Addiitional commands to include newly added lef to openlane flow merged.lef:**
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+
+**Command to display current value of variable SYNTH_STRATEGY:**
+echo $::env(SYNTH_STRATEGY)
+
+**Command to set new value for SYNTH_STRATEGY:**
+set ::env(SYNTH_STRATEGY) "DELAY 3"
+
+**Command to display current value of variable SYNTH_BUFFERING to check whether it's enabled:**
+echo $::env(SYNTH_BUFFERING)
+
+**Command to display current value of variable SYNTH_SIZING:**
+echo $::env(SYNTH_SIZING)
+
+**Command to set new value for SYNTH_SIZING:**
+set ::env(SYNTH_SIZING) 1
+
+**Command to display current value of variable SYNTH_DRIVING_CELL to check whether it's the proper cell or not:**
+echo $::env(SYNTH_DRIVING_CELL)
+
+**Now that the design is prepped and ready, we can run synthesis using following command:**
+run_synthesis
+
+
+
+
+
+
+
+
+
+
 
 
 
