@@ -664,6 +664,34 @@ echo $::env(SYNTH_DRIVING_CELL)
 **Now that the design is prepped and ready, we can run synthesis using following command:**
 run_synthesis
 
+Attached below is the screenshots of above commands been run
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-44-21" src="https://github.com/user-attachments/assets/6da41a4f-b311-47fb-b6b0-90e6cec56757" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-46-55" src="https://github.com/user-attachments/assets/be42048d-be62-444b-9472-a57245106890" />
+
+Comparing to previously noted run values area has increased and worst negative slack has become 0
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-47-25" src="https://github.com/user-attachments/assets/b9024fb8-62c6-4259-8f5a-8e4fd087f43e" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-47-33" src="https://github.com/user-attachments/assets/915aac52-a3a4-43bd-ba30-2b6dedbffa08" />
+
+**8. Once synthesis has accepted our custom inverter we can now run floorplan and placement and verify the cell is accepted in PnR flow.**
+
+Now that our custom inverter is properly accepted in synthesis we can now run floorplan using following command: run_floorplan
+
+But due to an unexpected error, we instead use these three commands for Floorplan:
+
+**init_floorplan**
+
+**place_io**
+
+**tap_decap_or**
+
+based on floorplan Commands section in **Desktop/work/tools/openlane_working_dir/openlane/docs/source/OpenLANE_commands.md**
+
+Attached below are the screenshots of above commands been run
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-57-24" src="https://github.com/user-attachments/assets/861b1f21-65a3-478c-9823-3320db36a30a" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-58-22" src="https://github.com/user-attachments/assets/c5e3f83a-08fd-45b9-9136-1d4c6255b359" />
 
 
 
