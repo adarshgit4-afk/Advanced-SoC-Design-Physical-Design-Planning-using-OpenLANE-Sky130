@@ -693,11 +693,71 @@ Attached below are the screenshots of above commands been run
 <img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-57-24" src="https://github.com/user-attachments/assets/861b1f21-65a3-478c-9823-3320db36a30a" />
 <img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-58-22" src="https://github.com/user-attachments/assets/c5e3f83a-08fd-45b9-9136-1d4c6255b359" />
 
+Now that floorplan is done we can do placement using following command: run_placement
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 00-58-42" src="https://github.com/user-attachments/assets/d898e039-73b9-451a-8e6b-15a050ad2882" />
 
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-03-22" src="https://github.com/user-attachments/assets/02cb05eb-5fcf-4606-b6a6-66a57d8b5b76" />
 
+Below are the commands to load placement def in magic in another terminal:
 
+**Change directory to path containing generated placement def:**
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/placement/
 
+**Command to load the placement def in magic tool:**
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+
+Attached below is the screenshot of placement def in magic
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-08-34" src="https://github.com/user-attachments/assets/f9aab9d6-d67b-4c5a-b601-54cdb0007acb" />
+
+Screenshot of custom inverter inserted in placement def with proper abutment
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-12-02" src="https://github.com/user-attachments/assets/b7dcd763-7cde-4ce8-9811-b4218bf32628" />
+
+Command for tkcon window to view internal layers of cells: expand
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-13-25" src="https://github.com/user-attachments/assets/d5ef03e7-b1a6-4dd9-8eac-466e9d57fe1f" />
+
+**9. Do Post-Synthesis timing analysis with OpenSTA tool.**
+
+Since we are having 0 wns after improved timing run we are going to do timing analysis on initial run of synthesis which has lots of violations and no parameters were added to improve timing
+
+**Change directory to openlane flow directory:**
+cd Desktop/work/tools/openlane_working_dir/openlane
+
+**Since we have aliased the long command to 'docker' we can invoke the OpenLANE flow docker sub-system by just running this command:**
+docker
+
+**Now that we have entered the OpenLANE flow contained docker sub-system we can invoke the OpenLANE flow in the Interactive mode using the following command:**
+./flow.tcl -interactive
+
+**Now that OpenLANE flow is open we have to input the required packages for proper functionality of the OpenLANE flow:**
+package require openlane 0.9
+
+**Now the OpenLANE flow is ready to run any design and initially we have to prep the design creating some necessary files and directories for running a specific design which in our case is 'picorv32a':**
+prep -design picorv32a
+
+**Adiitional commands to include newly added lef to openlane flow:**
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+
+**Command to set new value for SYNTH_SIZING:**
+set ::env(SYNTH_SIZING) 1
+
+**Now that the design is prepped and ready, we can run synthesis using following command:**
+run_synthesis
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-26-41" src="https://github.com/user-attachments/assets/aba48f84-a177-4d5b-9393-12e5ca6d3591" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 01-27-57" src="https://github.com/user-attachments/assets/6e6eeee2-2521-4610-aac1-56ca9e8f064b" />
+
+Newly created pre_sta.conf for STA analysis in openlane directory
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-04-41" src="https://github.com/user-attachments/assets/fa90cf56-a895-4900-8ca7-23e55637f620" />
+
+Newly created my_base.sdc for STA analysis in openlane/designs/picorv32a/src directory based on the file openlane/scripts/base.sdc
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-16 02-05-22" src="https://github.com/user-attachments/assets/813dad0d-092b-4355-a7f6-89bf95ef0a24" />
 
 
 
