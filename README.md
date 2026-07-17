@@ -282,6 +282,231 @@ Attached below is the final edited spice file ready for ngspice simulation.
 
 <img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-15-52" src="https://github.com/user-attachments/assets/fc9892a3-82f8-483d-9529-ab478ad798a8" />
 
+**5. Post-layout ngspice simulations.**
+
+Attached below are the screenshots of ngspice run.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-16-26" src="https://github.com/user-attachments/assets/d24b7da2-ee60-420a-a977-6b70f62f0726" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-18-01" src="https://github.com/user-attachments/assets/d1d91043-2048-47ba-ad3c-f515413d2990" />
+
+Below is the screenshot of generated plot.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-19-51" src="https://github.com/user-attachments/assets/fd3f05d4-03ee-4820-a9bf-157fb20ce7a4" />
+
+**Rise transition time calculation**
+
+*`Rise_transition_time = time_taken_for_output_to_rise_to_80_percent - time_taken_for_output_to_rise_to_20_percent`*
+
+*`output_20_percent = 660_mV`*
+
+*`output_80_percent = 2.64_V`*
+
+20% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-36-01" src="https://github.com/user-attachments/assets/1f0f97ef-611f-4921-9cd0-1199ebe90f45" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-41-35" src="https://github.com/user-attachments/assets/92917db6-b12a-467a-891a-dc17ceb9480a" />
+
+80% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-42-23" src="https://github.com/user-attachments/assets/cb6d6f07-3ba1-4227-8f04-ba18a73f7950" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-42-30" src="https://github.com/user-attachments/assets/2ce58ee9-7dc0-4175-a3eb-3a52a24e8fca" />
+
+Rise Transition time = 2.24494 − 2.18181 = 0.06313 ns = 63.13 ps 
+
+**Fall Transition time calculation**
+
+*`Fall_transition_time = time_taken_for_output_to_fall_to_20_percent - time_taken_for_output_to_fall_to_80_percent`*
+
+*`output_20_percent = 660_mV`*
+
+*`output_80_percent = 2.64_V`*
+
+20% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-47-53" src="https://github.com/user-attachments/assets/c2eaebac-ea0d-461a-9dc4-545057309169" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-47-59" src="https://github.com/user-attachments/assets/60ea0454-e163-49e8-9762-0a4eedc12dfd" />
+
+80% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-49-06" src="https://github.com/user-attachments/assets/16d0ceef-cb89-4043-b599-a12ed6c983b3" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-49-14" src="https://github.com/user-attachments/assets/e4b32ae0-46c7-405d-b9ba-53437c9e2678" />
+
+Fall Transition time = 4.09495 - 4.05246 = 0.04249 ns = 42.49 ps
+
+**Rise Cell Delay Calculation**
+
+*`Rise_Cell_delay = time_taken_for_output_to_rise_to_50_percent - time_taken_for_input_to_fall_to_50_percent`*
+
+*`50%_of_3.3V = 1.65V`*
+
+50% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-53-06" src="https://github.com/user-attachments/assets/3f56e36f-d4fb-457a-a7ee-c46685c86f4d" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-54-31" src="https://github.com/user-attachments/assets/c5f605d2-0b92-4870-8c13-722b3a7fd66f" />
+
+Rise cell delay = 2.21045 − 2.15 = 0.06045 ns = 60.45 ps
+
+**Fall Cell Delay Calculation**
+
+*`Fall_Cell_delay = time_taken_for_output_to_fall_to_50_percent - time_taken_for_input_to_rise_to_50_percent`*
+
+*`50%_of_3.3V = 1.65V`*
+
+50% Screenshots
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-58-00" src="https://github.com/user-attachments/assets/11cc09c3-98c6-4e55-8b02-a22b05171577" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 01-58-10" src="https://github.com/user-attachments/assets/27bffcd9-07d7-4da8-b861-d3e92f37a27e" />
+
+Fall cell delay = 4.07737 - 4.05 = 0.02737 ns = 27.37 ps
+
+**6. Find problem in the DRC section of the old magic tech file for the skywater process and fix them.**
+
+Link to Sky130 Periphery rules: [Sky 130 Periphery rules](https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html)
+
+Attached below is the screenshot of commands to download and view the corrupted skywater process magic tech file and associated files to perform drc corrections.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-07-44" src="https://github.com/user-attachments/assets/5dbc3052-a387-487f-8b9b-09e75ca8d459" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-07-54" src="https://github.com/user-attachments/assets/ebc4e520-eac0-48e3-8f96-5dea047f3cdc" />
+
+Attached below is the screenshot of .magicrc file
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-08-14" src="https://github.com/user-attachments/assets/5e4d6d13-4c8c-4456-9641-b5d1b044337f" />
+
+**Incorrectly implemented poly.9 simple rule correction**
+
+Attached below is the screenshot of poly rules.
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-13-38" src="https://github.com/user-attachments/assets/2adf7436-71b2-47be-915d-4483dbd0df22" />
+
+Incorrectly implemented poly.9 rule no drc violation even though spacing < 0.48u
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-33-17" src="https://github.com/user-attachments/assets/80207056-8e49-46ae-99ed-557c1fcf848e" />
+
+New commands inserted in sky130A.tech file to update drc
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-47-24" src="https://github.com/user-attachments/assets/a8485f86-2c93-435a-8c25-70295cd1121a" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 03-51-14" src="https://github.com/user-attachments/assets/0c11e591-b3e1-42be-a25b-060e6bc52614" />
+
+Commands to run in tkcon window
+
+Loading updated tech file:
+tech load sky130A.tech
+
+Must re-run drc check to see updated drc errors:
+drc check
+
+Selecting region displaying the new errors and getting the error messages:
+drc why
+
+Attached below is the screenshot of magic window with rule implemented
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-35-33" src="https://github.com/user-attachments/assets/a9c233e8-dc9e-4ffe-9ef9-b67c09f4d838" />
+
+**Incorrectly implemented difftap.2 simple rule correction**
+
+Screenshot of difftap rules
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-37-33" src="https://github.com/user-attachments/assets/3a8ccdbb-2d21-48a6-88c5-a79d3b18e63f" />
+
+Incorrectly implemented difftap.2 rule no drc violation even though spacing < 0.42u
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-39-03" src="https://github.com/user-attachments/assets/43db8313-12f9-4299-a7a8-2f64f8aa0aa0" />
+
+New commands inserted in sky130A.tech file to update drc
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-43-52" src="https://github.com/user-attachments/assets/a19524a7-a520-49f0-845f-f968ac655f69" />
+
+Attached below is the screenshot of magic window with rule implemented
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-45-34" src="https://github.com/user-attachments/assets/dad5924f-796e-4fb0-954a-17cebc68aa87" />
+
+**Incorrectly implemented nwell.4 complex rule correction**
+
+Attached below is the screenshot of nwell rules
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-18 01-00-01" src="https://github.com/user-attachments/assets/14af007e-2236-41fd-922b-5d72fc436843" />
+
+
+Incorrectly implemented nwell.4 rule no drc violation even though no tap present in nwell
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-52-32" src="https://github.com/user-attachments/assets/e0be9653-5a2d-422e-aaa1-4e2a96b6b6b5" />
+
+New commands inserted in sky130A.tech file to update drc
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 04-56-50" src="https://github.com/user-attachments/assets/4dd70044-474b-473a-9b9f-d23d2af055a6" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 05-03-12" src="https://github.com/user-attachments/assets/6d62a75b-2a15-4218-aa7c-687a2c47c129" />
+
+Attached below is the screenshot of magic window with rule implemented
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-15 05-14-00" src="https://github.com/user-attachments/assets/292edf4d-7635-4d9a-9b3e-0e4f4547bbce" />
+
+# Section 3 - Design library cell using Magic Layout and ngspice characterization
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
