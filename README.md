@@ -1073,36 +1073,190 @@ echo $::env(CTS_CLK_BUFFER_LIST)
 <img width="1920" height="1080" alt="Screenshot from 2026-07-18 03-15-00" src="https://github.com/user-attachments/assets/bf572397-43a1-442c-bd9b-32325fe3c436" />
 
 
+# Section 5 - Final steps for RTL2GDS using tritonRoute and openSTA
+
+## Theory
+
+### Final Synthesis: Routing & Physical Sign-Off
+
+The final phase of the physical design flow transforms a placed and clocked design into a manufacturable layout. This stage establishes the physical wiring connections and runs strict verification checks to ensure the chip can be fabricated without defects.
+
+### The Two Stages of Routing
+
+Routing builds the physical metal interconnections between standard cells while maintaining timing budgets and avoiding manufacturing errors.
+
+**Global Routing:** The tool divides the chip into a coarse grid to map high-level path trajectories. This stage estimates available routing resources, identifies localized congestion, and generates reference guides for the final pass.
+
+**Detailed Routing:** Utilizing the global routing guides, engines like TritonRoute handle exact wire placement. This stage handles precise metal layer assignments and inserts connecting vias while adhering to all fabrication constraints to yield a clean layout.
+
+### Final Sign-Off Verification
+
+Sign-off checks act as the quality gates that validate a layout against manufacturing, electrical, and logical requirements before fabrication.
+
+#### 1. Design Rule Checking (DRC)
+
+DRC screens the layout against geometric constraints dictated by the Sky130 PDK.
+
+**Geometric Limits:** Evaluates minimum wire widths, spacing tolerances between parallel nets, and layer enclosure rules.
+
+**Fabrication Safety:** A clean DRC report ensures the foundry tools can resolve the shapes physically on silicon without creating shorts or open circuits.
+
+#### 2. Layout Versus Schematic (LVS)
+
+LVS cross-references the finished physical layout against the original synthesized gate-level netlist.
+
+**Connectivity Review:** Verifies that all nets route to their intended target pins.
+
+**Device Matching:** Confirms correct transistor counts, dimensions, and instantiation, ensuring no extra or missing structures exist.
+
+#### 3. Static Timing Analysis (STA)
+
+STA provides the final validation that the physical layout meets all timing constraints across varying voltage and temperature corners.
+
+**Critical Path Audit:** Tools like OpenSTA recalculate paths using actual RC wire parasitics extracted from the finished routes.
+
+**Timing Guard:** Confirms that the design maintains positive setup and hold slacks, guaranteeing the chip will function properly at its target operating frequency.
+
+## Implementation
+
+**1. Perform generation of Power Distribution Network (PDN) and explore the PDN layout.**
+
+Commands to perform all necessary stages up until now and to get power distribution network: **gen_pdn**
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 03-48-02" src="https://github.com/user-attachments/assets/59417a18-ecf7-43b7-b746-f2eba5dea648" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 03-48-11" src="https://github.com/user-attachments/assets/3899b4c6-9cf4-4372-ae29-9f0ae7567a56" />
+
+Below are the commands to load PDN def in magic in another terminal :
+
+**Change directory to path containing generated PDN def:**
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/tmp/floorplan/
+
+**Command to load the PDN def in magic tool:**
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read 14-pdn.def &
+
+Attached below is the screenshots of PDN def
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 03-50-24" src="https://github.com/user-attachments/assets/e33a20af-3fb0-442c-9974-c4d86625935c" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 03-52-09" src="https://github.com/user-attachments/assets/59635da5-645c-42bf-9440-8673689d38ba" />
+
+**2. Perfrom detailed routing using TritonRoute and explore the routed layout.**
+
+Command to perform routing: **run_routing**
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-17-34" src="https://github.com/user-attachments/assets/510d05d5-bde8-44c1-8f4f-4ec0626e88e5" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-17-59" src="https://github.com/user-attachments/assets/db816cb3-b6b4-4bae-8a03-34e46d297429" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-18-04" src="https://github.com/user-attachments/assets/8023ae6c-79b8-472b-8d28-e6c69e04024e" />
+
+Below are the commands to load routed def in magic in another terminal:
+
+**Change directory to path containing routed def:**
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/routing/
+
+**Command to load the routed def in magic tool:**
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.def &
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-21-19" src="https://github.com/user-attachments/assets/d485e4e2-9e94-456b-8336-1a85f0a1906e" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-23-14" src="https://github.com/user-attachments/assets/7357e983-e919-4dad-bf41-99df919cbad9" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-24-11" src="https://github.com/user-attachments/assets/e3a359ea-c9cb-43e4-87ae-c2d12fde68e9" />
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-26-06" src="https://github.com/user-attachments/assets/1a343529-5240-4a67-83af-7307400091e2" />
+
+Screenshot of fast route guide present in openlane/designs/picorv32a/runs/26-03_08-45/tmp/routing directory
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 04-29-20" src="https://github.com/user-attachments/assets/2b88fa7e-c16f-45b2-ab3a-a0dbabe80296" />
 
 
+**3. Post-Route parasitic extraction using SPEF extractor.**
+
+Commands for SPEF extraction using external tool:
+
+**Change directory:**
+cd Desktop/work/tools/SPEF_EXTRACTOR
+
+**Command extract spef:**
+python3 main.py /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/26-03_08-45/tmp/merged.lef /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/15-07_18-19/results/routing/picorv32a.def
+
+**4. Post-Route OpenSTA timing analysis with the extracted parasitics of the route.**
+
+Commands to be run in OpenLANE flow to do OpenROAD timing analysis with integrated OpenSTA in OpenROAD:
+
+**Command to run OpenROAD tool:**
+openroad
+
+**Reading lef file:**
+read_lef /openLANE_flow/designs/picorv32a/runs/15-07_18-19/tmp/merged.lef
+
+**Reading def file:**
+read_def /openLANE_flow/designs/picorv32a/runs/15-07_18-19/results/routing/picorv32a.def
+
+**Creating an OpenROAD database to work with:**
+write_db pico_route.db
+
+**Loading the created database in OpenROAD:**
+read_db pico_route.db
+
+**Read netlist post CTS:**
+read_verilog /openLANE_flow/designs/picorv32a/runs/15-07_18-19/results/synthesis/picorv32a.synthesis_preroute.v
+
+**Read library for design:**
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+
+**Link design and library:**
+link_design picorv32a
+
+**Read in the custom sdc we created:**
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+
+**Setting all cloks as propagated clocks:**
+set_propagated_clock [all_clocks]
+
+**Read SPEF:**
+read_spef /openLANE_flow/designs/picorv32a/runs/26-03_08-45/results/routing/picorv32a.spef
+
+**Generating custom timing report:**
+report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
+
+**Exit to OpenLANE flow:**
+exit
+
+Screenshots of commands run and timing report generated
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 05-03-06" src="https://github.com/user-attachments/assets/b7330713-c7be-4f5e-a2ad-637c19ffa592" />
+
+<img width="1920" height="1080" alt="Screenshot from 2026-07-17 05-04-08" src="https://github.com/user-attachments/assets/e1dc94a1-87c8-412e-b397-7dc3f71fe2c1" />
 
 
+## The Finish Line: Fabrication & Deliverables
 
+The successful completion of routing and physical sign-off marks the final transition of the project from digital abstraction to tangible silicon. This phase compiles the layout data into the standard industry format required for production.
 
+### 1. The GDSII Stream File
 
+The GDSII file represents the ultimate deliverable of the physical design process. It acts as the final geometric database, containing the exact binary blueprints of every mask layer, polygon, and connection required by the foundry to etch the circuit into silicon.
 
+### 2. Fabrication-Ready Design Verification
 
+Reaching this milestone guarantees that the design has passed all three pillars of physical hardware verification:
 
+**Functional Correctness:** The layout logic matches the intended system behavior.
 
+**Timing Closure:** All signal paths satisfy strict clock setup and hold constraints.
 
+**Manufacturing Compliance:** The geometric structures conform precisely to the Sky130 PDK design rules.
 
+## Conclusion & Core Takeaways
 
+This workflow demonstrates the feasibility and efficiency of the modern open-source Electronic Design Automation (EDA) ecosystem. By guiding a design completely from a high-level Register Transfer Level (RTL) description down to a physical GDSII layout, this repository bridges the gap between theoretical microarchitecture concepts and practical, hands-on Application-Specific Integrated Circuit (ASIC) implementation skills.
 
+## Project Acknowledgements
 
+This implementation was made possible through the technical frameworks, educational platforms, and toolchains championed by the following pioneers in the open-source hardware community:
 
+**Kunal Ghosh** – Co-founder, VLSI System Design (VSD) Corp. Pvt. Ltd.
 
+**Nickson P. Jose** – Physical Design Engineer, Intel Corporation
 
-
-
-
-
-
-
-
-
-
-
-
+**R. Timothy Edwards** – Senior Vice President of Analog and Design, efabless Corporation
 
 
 
